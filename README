@@ -1,0 +1,6 @@
+ActionAuditor
+=============
+
+Allows you to write simple logs of your Rails actions.
+
+Copyright (c) 2009 Matt Powell, released under the MIT license
