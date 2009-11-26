@@ -1,0 +1,4 @@
+Description:
+  Generates a migration to create a database table to store
+  your application's audit trail.
+  

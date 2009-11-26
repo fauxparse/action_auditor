@@ -1,1 +1,1 @@
-include "action_auditor"
+require "action_auditor"
