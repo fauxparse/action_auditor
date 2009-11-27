@@ -1,5 +1,9 @@
 module ActionAuditor
   module Auditor
+    # The simplest possible implementation of an auditor.
+    # Simply maintains a list of [message, hash] pairs,
+    # with no persistence.
+    # This is mainly of use for testing.
     class Simple < Base
       def initialize
         @messages = []
