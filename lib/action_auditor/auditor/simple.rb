@@ -16,6 +16,10 @@ module ActionAuditor
       def size
         @messages.size
       end
+      
+      def last
+        @messages.last
+      end
     end
   end
 end

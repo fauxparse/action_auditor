@@ -8,7 +8,7 @@ module ActionAuditor
   end
   
   def self.log(message, parameters = {})
-    @@auditors.each { |auditor| auditor.log(message, parameters) }
+    auditors.each { |auditor| auditor.log(message, parameters) }
   end
 end
 

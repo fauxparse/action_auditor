@@ -4,7 +4,7 @@ module ActionAuditor
       module ClassMethods
         def audit(*args, &block)
           options = args.last.is_a?(Hash) ? args.pop : {}
-          @pending_auditor = [ args, options, block ]
+          @pending_auditor = [ args, options, block_given? ? block : args.first ]
         end
         
         def method_added_with_auditing(name)
@@ -18,13 +18,18 @@ module ActionAuditor
       
       def audit_last_action
         if auditor = self.class.auditors[action_name.to_sym]
-          args, options, block = auditor
+          args, options, block_or_message = auditor
           parameters = {}
-          log_message = if block.arity.zero?
-            block.call
-          else
-            block.call parameters
+          
+          log_message, parameters = case block_or_message
+          when String then [ block_or_message, {} ]
+          when Proc
+            values = Array(instance_eval(&block_or_message))
+            values << {} if values.size < 2
+            values[0,2]
           end
+          
+          log_message.gsub!(/\{\{(\w+)\}\}/) { parameters[$1.to_sym].to_s }
           
           ActionAuditor.log(log_message, parameters)
         end
