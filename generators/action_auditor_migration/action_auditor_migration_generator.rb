@@ -10,6 +10,6 @@ class ActionAuditorMigrationGenerator < Rails::Generator::Base
   end
   
   def file_name
-    "action_auditor_table"
+    "create_action_auditor_table"
   end
 end

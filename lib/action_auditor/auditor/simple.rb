@@ -5,6 +5,10 @@ module ActionAuditor
     # with no persistence.
     # This is mainly of use for testing.
     class Simple < Base
+      class LoggedAction < Struct.new(:message, :parameters)
+        
+      end
+      
       def initialize
         @messages = []
       end
@@ -14,7 +18,7 @@ module ActionAuditor
       end
       
       def log(message, parameters = {})
-        @messages << [ message, parameters ]
+        @messages << LoggedAction.new(message, parameters)
       end
       
       def size

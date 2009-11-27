@@ -1,8 +1,8 @@
-class ActsAsTaggableMigration < ActiveRecord::Migration
+class CreateActionAuditorTable < ActiveRecord::Migration
   def self.up
     create_table :logged_actions do |t|
       t.belongs_to :scope, :polymorphic => true
-      t.text       :description
+      t.text       :message
       t.text       :parameters
       t.timestamp  :created_at
     end

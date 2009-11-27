@@ -54,12 +54,12 @@ end
 
 describe TestController do
   [
-    ActionAuditor::Auditor::Simple.new
+    ActionAuditor::Auditor::Simple.new,
+    ActionAuditor::Auditor::ActiveRecord.new
   ].each do |auditor|
-    ActionAuditor.auditors = auditor
-    
     describe "with #{auditor.class.name.demodulize} auditing" do
       before :each do
+        ActionAuditor.auditors = auditor
         Thing.clear!
         auditor.clear!
       end
@@ -76,7 +76,7 @@ describe TestController do
       
       it "should provide a message on visits to /simple" do
         get :simple
-        auditor.last.first.should == "Someone looked at something"
+        auditor.last.message.should == "Someone looked at something"
       end
       
       it "should not log visits to /unlogged" do
@@ -93,9 +93,8 @@ describe TestController do
 
       it "should keep a correct log of visits to /substituted" do
         get :substituted
-        message, params = auditor.last
-        message.should == "Message from Matt"
-        params.should be_empty
+        auditor.last.message.should == "Message from Matt"
+        auditor.last.parameters.should be_empty
       end
 
       it "should log visits to /complex" do
@@ -106,11 +105,12 @@ describe TestController do
 
       it "should keep a correct log of visits to /complex" do
         get :complex
-        message, params = auditor.last
-        message.should == "Matt created Thing(colour:red)"
-        params[:user].should == "Matt"
-        params[:thing].should be_a(Thing)
+        log = auditor.last
+        log.message.should == "Matt created Thing(colour:red)"
+        log.parameters[:user].should == "Matt"
+        log.parameters[:thing].should be_a(Thing)
       end
     end
   end
 end
+

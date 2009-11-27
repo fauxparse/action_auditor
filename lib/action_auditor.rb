@@ -11,5 +11,3 @@ module ActionAuditor
     auditors.each { |auditor| auditor.log(message, parameters) }
   end
 end
-
-ActionController::Base.send :include, ActionAuditor::Extensions::ActionController
