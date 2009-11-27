@@ -16,7 +16,9 @@ class Thing
   end
   
   def self.create(params = {})
-    @things << new(params)
+    returning new(params) do |thing|
+      @things << thing
+    end
   end
   
   def self.last
@@ -39,9 +41,9 @@ class TestController < ActionController::Base
     
   end
   
-  audit { [ "{{user}} created {{thing}}", { :user => current_user, :thing => Thing.last } ] }
+  audit { [ "{{user}} created {{thing}}", { :user => current_user, :thing => @thing } ] }
   def complex
-    Thing.create :colour => :red
+    @thing = Thing.create :colour => :red
   end
   
 protected
